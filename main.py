@@ -1,43 +1,55 @@
 import os
 import googletrans
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
+
 from url_read import file
 import selenium
 from selenium.webdriver.common.by import By
 
 
-PATH = 'C:/Users/DELL/Desktop/project_in/geckodriver.exe'
+PATH = 'C:/project_in/geckodriver.exe'
+
+for i in range (10):
+    url = "https://www.amazon.{country}/dp/{asin}"
 
 
-str = "https://www.amazon.{country}/dp/{asin}"
+    asin, country = file.get_entry(i)
+    print("Entry number " + str(i) + ": ", asin, country)
+
+    str1 = url.replace("{country}", country)
+    str2 = str1.replace("{asin}", asin)
 
 
-asin, country = file.get_entry(2)
-print(asin, country)
 
-str1 = str.replace("{country}", country)
-str2 = str1.replace("{asin}", asin)
+    # create webdriver object
+    driver = webdriver.Firefox(executable_path=PATH)
+    #driver.implicitly_wait(4)
 
-# sorry in diffrent languages (for seeing error)
-sorry = {'ENTSCHULDIGUNG', 'DÉSOLÉ', 'dispiace'}
+    # get website
+    driver.get(str2)
 
-# create webdriver object
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
-driver.implicitly_wait(4)
+    try:
+        driver.find_element(By.XPATH, '//*[@id="sp-cc-accept"]').click()
+    
+    except Exception:
+        print(str2 + "not available.")
 
-# get website
-driver.get(str2)
-driver.find_element(By.XPATH, '//*[@id="sp-cc-accept"]').click()
+    try:
 
-product_id = driver.find_element(By.ID, "productTitle")
-print("Product Name : " + product_id.text)
+        product_id = driver.find_element(By.ID, "productTitle")
+        print("Product Name : " + product_id.text)
 
-images = driver.find_element(By.TAG_NAME, 'img')
-print("Image Link is: " + images.get_attribute('src'))
+        images = driver.find_element(By.TAG_NAME, 'img')
+        print("Image Link is: \n" + images.get_attribute('src'))
 
-price = driver.find_element(By.CLASS_NAME, "a-price-whole")
-print("Price is : " + price.text)
+        price_whole = driver.find_element(By.CLASS_NAME, "a-price-whole")
+        price_frac = driver.find_element(By.CLASS_NAME, "a-price-fraction")
+        print("Price is : " + price_whole.text + "." + price_frac.text)
 
-driver.close()
+        desc = driver.find_element(By.CLASS_NAME, "a-list-item")
+        print("About the item :\n" + desc.text)
+
+    except (Exception):
+        print(Exception)
+
+    driver.close()
