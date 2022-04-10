@@ -6,8 +6,17 @@ import selenium
 from selenium.webdriver.common.by import By
 import json
 
+""" 
+Geckodriver is used as web driver for firefox, 
+if you want to use chrome or chromium you can visit internet 
+and download respective drivers and change location.
+""" 
+
+# Specify the path of geckodriver.exe
 
 PATH = 'C:/project_in/geckodriver.exe'
+
+# dictionary object to store respective output
 d = {}
 
 for i in range (101):
