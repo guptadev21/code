@@ -10,7 +10,7 @@ import json
 PATH = 'C:/project_in/geckodriver.exe'
 d = {}
 
-for i in range (25):
+for i in range (101):
     url = "https://www.amazon.{country}/dp/{asin}"
 
 
@@ -19,7 +19,6 @@ for i in range (25):
         country = country.replace("\n", "")
     except Exception:
         continue
-    #print("Entry number " + str(i) + ": ", asin, country)
 
     str1 = url.replace("{country}", country)
     str2 = str1.replace("{asin}", asin)
@@ -28,7 +27,6 @@ for i in range (25):
 
     # create webdriver object
     driver = webdriver.Firefox(executable_path=PATH)
-    #driver.implicitly_wait(4)
 
     # get website
     driver.get(str2)
