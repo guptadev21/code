@@ -25,5 +25,4 @@ I used selenium and firefox to open websites and extract data like :
 
 
 ## License
-[MIT]
-(https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)
